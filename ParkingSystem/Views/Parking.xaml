@@ -7,7 +7,44 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock
-            Text="Parking" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.8*" />
+            <RowDefinition Height="0.2*" />
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image Name="EnterImage"
+                   Margin="0 5"
+                   Source="/Video/enter.jpg"
+                   Grid.Column="0"
+                   Stretch="Uniform" />
+            <Image Name="ParkingImage"
+                   Margin="0 5"
+                   Source="/Video/parking.jpg"
+                   Grid.Column="1"
+                   Stretch="Uniform" />
+        </Grid>
+        <Grid Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding ImageList}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding}"
+                               Width="100"
+                               Height="100"
+                               Margin="5" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
     </Grid>
 </UserControl>

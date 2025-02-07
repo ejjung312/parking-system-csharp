@@ -9,11 +9,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Video\enter.jpg" />
+    <None Remove="Video\parking.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Video\enter.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Video\parking.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
     <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
     <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.10.0.20241108" />
     <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.10.0.20241108" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
     <PackageReference Include="YoloDotNet" Version="2.2.0" />
   </ItemGroup>
 
