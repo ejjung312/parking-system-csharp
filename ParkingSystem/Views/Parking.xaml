@@ -19,8 +19,8 @@
             </Grid.ColumnDefinitions>
 
             <Image Name="EnterImage"
+                   Source="{Binding EnterImage}"
                    Margin="0 5"
-                   Source="/Video/enter.jpg"
                    Grid.Column="0"
                    Stretch="Uniform" />
             <Image Name="ParkingImage"

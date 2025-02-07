@@ -17,6 +17,7 @@ namespace ParkingSystem
         public static IHostBuilder CreateHostBuilder(string[] args = null)
         {
             return Host.CreateDefaultBuilder(args)
+                .AddServices()
                 .AddStores()
                 .AddViewModels()
                 .AddViews();
