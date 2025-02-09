@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using HostBuilders;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ParkingSystem.HostBuilders;
 using System.Windows;
@@ -17,6 +18,7 @@ namespace ParkingSystem
         public static IHostBuilder CreateHostBuilder(string[] args = null)
         {
             return Host.CreateDefaultBuilder(args)
+                .AddAPI()
                 .AddServices()
                 .AddStores()
                 .AddViewModels()
