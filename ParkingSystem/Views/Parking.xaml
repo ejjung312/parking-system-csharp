@@ -38,10 +38,13 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Image Source="{Binding}"
-                               Width="100"
-                               Height="100"
-                               Margin="5" />
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="{Binding LicensePlateImg}"
+                                   Width="100"
+                                   Margin="5" />
+                            <TextBlock Text="{Binding LicensePlateText}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

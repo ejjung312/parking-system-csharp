@@ -1,8 +1,7 @@
-﻿using ParkingSystem.Services;
+﻿using ParkingSystem.API.Results;
+using ParkingSystem.Services;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -14,7 +13,7 @@ namespace ParkingSystem.ViewModels
         private readonly IParkingMonitoringService _parkingMonitoringService;
         private ImageSource _enterImage;
         private ImageSource _parkingImage;
-        private ObservableCollection<BitmapSource> _imageList;
+        private ObservableCollection<LicensePlateItem> _imageList;
         private CancellationTokenSource _ctnEnter;
         private CancellationTokenSource _ctsParking;
 
@@ -47,7 +46,7 @@ namespace ParkingSystem.ViewModels
             }
         }
 
-        public ObservableCollection<BitmapSource> ImageList 
+        public ObservableCollection<LicensePlateItem> ImageList 
         {
             get => _imageList;
             set
@@ -62,7 +61,7 @@ namespace ParkingSystem.ViewModels
             _licensePlateService = licensePlateService;
             _parkingMonitoringService = parkingMonitoringService;
 
-            ImageList = new ObservableCollection<BitmapSource>();
+            ImageList = new ObservableCollection<LicensePlateItem>();
 
             _licensePlateService.FrameProcessed += LicensePlateService_FrameProcessed;
             _parkingMonitoringService.FrameProcessed += frame => ParkingImage = frame;
@@ -83,11 +82,11 @@ namespace ParkingSystem.ViewModels
                 // UI 스레드에서 호출
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (ImageList.Count > 6)
+                    if (ImageList.Count >= 7)
                     {
                         ImageList.RemoveAt(0);
                     }
-                    ImageList.Add(licensePlateImg);
+                    ImageList.Add(new LicensePlateItem { LicensePlateImg = licensePlateImg, LicensePlateText = licensePlateTxt });
                 });
             }
         }
