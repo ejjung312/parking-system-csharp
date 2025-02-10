@@ -34,7 +34,7 @@ namespace ParkingSystem.HostBuilders
 
         private static ParkingViewModel CreateParkingViewModel(IServiceProvider services)
         {
-            return new ParkingViewModel(services.GetRequiredService<IVideoProcessingService>());
+            return new ParkingViewModel(services.GetRequiredService<ILicensePlateService>(), services.GetRequiredService<IParkingMonitoringService>());
         }
 
         private static LoginViewModel CreateLoginViewModel(IServiceProvider services)

@@ -1,19 +1,20 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
 using ParkingSystem.API.Services;
+using ParkingSystem.Services;
 using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace ParkingSystem.Services
+namespace Services
 {
-    public class LicensePlateService : ILicensePlateService
+    public class ParkingMonitoringService : IParkingMonitoringService
     {
-        private ILicensePlateDetectionService _licensePlateDetectionService;
+        private IParkingDetectionService _parkingDetectionService;
         public event Action<BitmapSource> FrameProcessed;
 
-        public LicensePlateService(ILicensePlateDetectionService licensePlateDetectionService)
+        public ParkingMonitoringService(IParkingDetectionService parkingDetectionService)
         {
-            _licensePlateDetectionService = licensePlateDetectionService;
+            _parkingDetectionService = parkingDetectionService;
         }
 
         public async Task StartProcessingAsync(string videoPath, CancellationToken cancellationToken)
@@ -30,17 +31,15 @@ namespace ParkingSystem.Services
                 {
                     if (!capture.Read(frame) || frame.Empty()) break;
 
-                    //frame = prediction(frame);
-                    // API 통신
-                    byte[] responseImage = await _licensePlateDetectionService.SendFrame(frame);
+                    byte[] responseImage = await _parkingDetectionService.SendFrame(frame);
                     Mat resultMat = Mat.FromImageData(responseImage, ImreadModes.Color);
 
                     BitmapSource bitmapSource = resultMat.ToBitmapSource();
-                    bitmapSource.Freeze(); // UI Thread에서 사용하기 위해 Freeze()
+                    bitmapSource.Freeze();
 
-                    FrameProcessed?.Invoke(bitmapSource); // 프레임 전달
+                    FrameProcessed?.Invoke(bitmapSource);
 
-                    Thread.Sleep(33); // 약 30fps 기준 (조정 가능)
+                    Thread.Sleep(33);
                 }
             }, cancellationToken);
         }

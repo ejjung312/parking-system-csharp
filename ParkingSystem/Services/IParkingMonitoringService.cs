@@ -2,7 +2,7 @@
 
 namespace ParkingSystem.Services
 {
-    public interface IVideoProcessingService
+    public interface IParkingMonitoringService
     {
         event Action<BitmapSource> FrameProcessed;
         Task StartProcessingAsync(string videoPath, CancellationToken cancellationToken);

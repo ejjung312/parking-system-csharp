@@ -1,19 +1,20 @@
-﻿using OpenCvSharp;
-using OpenCvSharp.WpfExtensions;
-using ParkingSystem.Services;
+﻿using ParkingSystem.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace ParkingSystem.ViewModels
 {
     public class ParkingViewModel : ViewModelBase
     {
-        private readonly IVideoProcessingService _licensePlateService;
+        private readonly ILicensePlateService _licensePlateService;
+        private readonly IParkingMonitoringService _parkingMonitoringService;
         private ImageSource _enterImage;
-        private CancellationTokenSource _cts;
+        private ImageSource _parkingImage;
+        private CancellationTokenSource _ctnEnter;
+        private CancellationTokenSource _ctsParking;
 
-        private string _video = "Video/enter.mp4";
+        private string _enterVideo = "Video/enter.mp4";
+        private string _parkingVideo = "Video/parking.mp4";
 
         public ImageSource EnterImage
         {
@@ -28,15 +29,34 @@ namespace ParkingSystem.ViewModels
             }
         }
 
+        public ImageSource ParkingImage
+        {
+            get
+            {
+                return _parkingImage;
+            }
+            set
+            {
+                _parkingImage = value;
+                OnPropertyChanged(nameof(ParkingImage));
+            }
+        }
+
         public ObservableCollection<string> ImageList { get; set; }
 
-        public ParkingViewModel(IVideoProcessingService licensePlateService)
+        public ParkingViewModel(ILicensePlateService licensePlateService, IParkingMonitoringService parkingMonitoringService)
         {
             _licensePlateService = licensePlateService;
-            _licensePlateService.FrameProcessed += frame => EnterImage = frame;
+            _parkingMonitoringService = parkingMonitoringService;
 
-            _cts = new CancellationTokenSource();
-            Task.Run(() => _licensePlateService.StartProcessingAsync(_video, _cts.Token));
+            _licensePlateService.FrameProcessed += frame => EnterImage = frame;
+            _parkingMonitoringService.FrameProcessed += frame => ParkingImage = frame;
+
+            _ctnEnter = new CancellationTokenSource();
+            Task.Run(() => _licensePlateService.StartProcessingAsync(_enterVideo, _ctnEnter.Token));
+
+            _ctsParking = new CancellationTokenSource();
+            Task.Run(() => _parkingMonitoringService.StartProcessingAsync(_parkingVideo, _ctsParking.Token));
 
             ImageList = new ObservableCollection<string>
             {
@@ -48,7 +68,8 @@ namespace ParkingSystem.ViewModels
 
         public override void Dispose()
         {
-            _cts.Cancel();
+            _ctnEnter.Cancel();
+            _ctsParking.Cancel();
 
             base.Dispose();
         }

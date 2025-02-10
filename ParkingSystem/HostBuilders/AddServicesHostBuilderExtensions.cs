@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using ParkingSystem.API.Services;
 using ParkingSystem.Services;
+using Services;
 
 namespace ParkingSystem.HostBuilders
 {
@@ -11,8 +12,10 @@ namespace ParkingSystem.HostBuilders
         {
             host.ConfigureServices(services =>
             {
-                services.AddSingleton<IVideoProcessingService, LicensePlateService>();
+                services.AddSingleton<ILicensePlateService, LicensePlateService>();
+                services.AddSingleton<IParkingMonitoringService, ParkingMonitoringService>();
                 services.AddSingleton<ILicensePlateDetectionService, LicensePlateDetectionService>();
+                services.AddSingleton<IParkingDetectionService, ParkingDetectionService>();
             });
 
             return host;

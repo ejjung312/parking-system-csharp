@@ -24,8 +24,8 @@
                    Grid.Column="0"
                    Stretch="Uniform" />
             <Image Name="ParkingImage"
+                   Source="{Binding ParkingImage}"
                    Margin="0 5"
-                   Source="/Video/parking.jpg"
                    Grid.Column="1"
                    Stretch="Uniform" />
         </Grid>
