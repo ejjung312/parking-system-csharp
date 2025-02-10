@@ -1,9 +1,10 @@
 ﻿using OpenCvSharp;
+using ParkingSystem.API.Results;
 
 namespace ParkingSystem.API.Services
 {
     public interface ILicensePlateDetectionService
     {
-        Task<byte[]> SendFrame(Mat frmae);
+        Task<ApiResponse> SendFrame(Mat frmae);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using OpenCvSharp;
+using ParkingSystem.API.Results;
 
 namespace ParkingSystem.API.Services
 {
@@ -13,20 +15,24 @@ namespace ParkingSystem.API.Services
             _client = client;
         }
 
-        public async Task<byte[]> SendFrame(Mat frame)
+        public async Task<ApiResponse> SendFrame(Mat frame)
         {
             string uri = _client.BaseAddress + "predict_license_plate";
 
             byte[] bytes = frame.ToBytes();
             var content = new ByteArrayContent(bytes);
-            //content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+
             content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
             HttpResponseMessage response = await _client.PostAsync(uri, content);
 
-            byte[] responseImage = await response.Content.ReadAsByteArrayAsync();
+            //byte[] responseImage = await response.Content.ReadAsByteArrayAsync();
+            string responseJson = await response.Content.ReadAsStringAsync();
 
-            return responseImage;
+            // JSON 파싱
+            var jsonData = JsonSerializer.Deserialize<ApiResponse>(responseJson);
+
+            return jsonData;
         }
     }
 }

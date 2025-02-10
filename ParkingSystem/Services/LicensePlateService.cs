@@ -1,5 +1,6 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
+using ParkingSystem.API.Results;
 using ParkingSystem.API.Services;
 using System.IO;
 using System.Windows.Media.Imaging;
@@ -9,7 +10,7 @@ namespace ParkingSystem.Services
     public class LicensePlateService : ILicensePlateService
     {
         private ILicensePlateDetectionService _licensePlateDetectionService;
-        public event Action<BitmapSource> FrameProcessed;
+        public event Action<BitmapSource, BitmapSource, String> FrameProcessed;
 
         public LicensePlateService(ILicensePlateDetectionService licensePlateDetectionService)
         {
@@ -30,15 +31,30 @@ namespace ParkingSystem.Services
                 {
                     if (!capture.Read(frame) || frame.Empty()) break;
 
-                    //frame = prediction(frame);
                     // API 통신
-                    byte[] responseImage = await _licensePlateDetectionService.SendFrame(frame);
-                    Mat resultMat = Mat.FromImageData(responseImage, ImreadModes.Color);
+                    ApiResponse jsonData = await _licensePlateDetectionService.SendFrame(frame);
+
+                    if (jsonData == null) continue;
+
+                    byte[] processedImg = Convert.FromBase64String(jsonData.ProcessedImg);
+                    Mat resultMat = Mat.FromImageData(processedImg, ImreadModes.Color);
 
                     BitmapSource bitmapSource = resultMat.ToBitmapSource();
                     bitmapSource.Freeze(); // UI Thread에서 사용하기 위해 Freeze()
 
-                    FrameProcessed?.Invoke(bitmapSource); // 프레임 전달
+                    BitmapSource licenseBitmapSource = null;
+                    if (jsonData.LicensePlateImg != null)
+                    {
+                        byte[] licensePlateImg = Convert.FromBase64String(jsonData.LicensePlateImg);
+                        Mat licenseresultMat = Mat.FromImageData(licensePlateImg, ImreadModes.Color);
+
+                        licenseBitmapSource = licenseresultMat.ToBitmapSource();
+                        licenseBitmapSource.Freeze(); // UI Thread에서 사용하기 위해 Freeze()
+
+                        //licenseDetectedFrameProcessed?.Invoke(licenseBitmapSource);
+                    }
+
+                    FrameProcessed?.Invoke(bitmapSource, licenseBitmapSource, jsonData.LicensePlateText); // 프레임 전달
 
                     Thread.Sleep(33); // 약 30fps 기준 (조정 가능)
                 }

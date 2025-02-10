@@ -1,6 +1,10 @@
 ﻿using ParkingSystem.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ParkingSystem.ViewModels
 {
@@ -10,6 +14,7 @@ namespace ParkingSystem.ViewModels
         private readonly IParkingMonitoringService _parkingMonitoringService;
         private ImageSource _enterImage;
         private ImageSource _parkingImage;
+        private ObservableCollection<BitmapSource> _imageList;
         private CancellationTokenSource _ctnEnter;
         private CancellationTokenSource _ctsParking;
 
@@ -42,14 +47,24 @@ namespace ParkingSystem.ViewModels
             }
         }
 
-        public ObservableCollection<string> ImageList { get; set; }
+        public ObservableCollection<BitmapSource> ImageList 
+        {
+            get => _imageList;
+            set
+            {
+                _imageList = value;
+                OnPropertyChanged(nameof(ImageList));
+            }
+        }
 
         public ParkingViewModel(ILicensePlateService licensePlateService, IParkingMonitoringService parkingMonitoringService)
         {
             _licensePlateService = licensePlateService;
             _parkingMonitoringService = parkingMonitoringService;
 
-            _licensePlateService.FrameProcessed += frame => EnterImage = frame;
+            ImageList = new ObservableCollection<BitmapSource>();
+
+            _licensePlateService.FrameProcessed += LicensePlateService_FrameProcessed;
             _parkingMonitoringService.FrameProcessed += frame => ParkingImage = frame;
 
             _ctnEnter = new CancellationTokenSource();
@@ -57,13 +72,24 @@ namespace ParkingSystem.ViewModels
 
             _ctsParking = new CancellationTokenSource();
             Task.Run(() => _parkingMonitoringService.StartProcessingAsync(_parkingVideo, _ctsParking.Token));
+        }
 
-            ImageList = new ObservableCollection<string>
+        private void LicensePlateService_FrameProcessed(BitmapSource processedImg, BitmapSource licensePlateImg, string licensePlateTxt)
+        {
+            EnterImage = processedImg;
+
+            if (licensePlateImg != null)
             {
-                "/Video/enter.jpg",
-                "/Video/enter.jpg",
-                "/Video/enter.jpg",
-            };
+                // UI 스레드에서 호출
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (ImageList.Count > 6)
+                    {
+                        ImageList.RemoveAt(0);
+                    }
+                    ImageList.Add(licensePlateImg);
+                });
+            }
         }
 
         public override void Dispose()

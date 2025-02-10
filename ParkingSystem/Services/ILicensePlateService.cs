@@ -4,7 +4,8 @@ namespace ParkingSystem.Services
 {
     public interface ILicensePlateService
     {
-        event Action<BitmapSource> FrameProcessed;
+        event Action<BitmapSource, BitmapSource, string> FrameProcessed;
+
         Task StartProcessingAsync(string videoPath, CancellationToken cancellationToken);
     }
 }

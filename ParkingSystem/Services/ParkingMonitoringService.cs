@@ -31,10 +31,11 @@ namespace Services
                 {
                     if (!capture.Read(frame) || frame.Empty()) break;
 
-                    byte[] responseImage = await _parkingDetectionService.SendFrame(frame);
-                    Mat resultMat = Mat.FromImageData(responseImage, ImreadModes.Color);
+                    //byte[] responseImage = await _parkingDetectionService.SendFrame(frame);
+                    //Mat resultMat = Mat.FromImageData(responseImage, ImreadModes.Color);
 
-                    BitmapSource bitmapSource = resultMat.ToBitmapSource();
+                    //BitmapSource bitmapSource = resultMat.ToBitmapSource();
+                    BitmapSource bitmapSource = frame.ToBitmapSource();
                     bitmapSource.Freeze();
 
                     FrameProcessed?.Invoke(bitmapSource);
