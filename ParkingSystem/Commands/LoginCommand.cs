@@ -1,17 +1,22 @@
-﻿using ParkingSystem.State.Navigators;
+﻿using ParkingSystem.Domain.Exceptions;
+using ParkingSystem.State.Navigators;
 using ParkingSystem.ViewModels;
+using State.Authenticators;
+using System.Windows;
 
 namespace ParkingSystem.Commands
 {
     public class LoginCommand : AsyncCommandBase
     {
         private readonly LoginViewModel _loginViewModel;
+        private readonly IAuthenticator _authenticator;
         private readonly IRenavigator _renavigator;
 
-        public LoginCommand(LoginViewModel loginViewModel, IRenavigator renavigator)
+        public LoginCommand(LoginViewModel loginViewModel, IAuthenticator authenticator, IRenavigator renavigator)
         {
             _loginViewModel = loginViewModel;
             _renavigator = renavigator;
+            _authenticator = authenticator;
 
             _loginViewModel.PropertyChanged += LoginViewModel_PropertyChanged;
         }
@@ -31,7 +36,24 @@ namespace ParkingSystem.Commands
 
         public override async Task ExecuteAsync(object? parameter)
         {
-            _renavigator.Renavigate();
+            try
+            {
+                await _authenticator.Login(_loginViewModel.Userid, _loginViewModel.Password);
+
+                _renavigator.Renavigate();
+            }
+            catch (UserNotFoundException)
+            {
+                MessageBox.Show("Username does not exist.");
+            }
+            catch (InvalidPasswordException)
+            {
+                MessageBox.Show("Incorrect password.");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Login failed.");
+            }
         }
     }
 }

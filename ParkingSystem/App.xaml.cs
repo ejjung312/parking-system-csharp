@@ -19,6 +19,7 @@ namespace ParkingSystem
         {
             return Host.CreateDefaultBuilder(args)
                 .AddAPI()
+                .AddDbContext()
                 .AddServices()
                 .AddStores()
                 .AddViewModels()

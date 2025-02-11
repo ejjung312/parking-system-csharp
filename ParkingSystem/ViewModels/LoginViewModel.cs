@@ -1,12 +1,13 @@
 ﻿using ParkingSystem.Commands;
 using ParkingSystem.State.Navigators;
+using State.Authenticators;
 using System.Windows.Input;
 
 namespace ParkingSystem.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-		private string _userid;
+		private string _userid = "test";
 		public string Userid
 		{
 			get
@@ -21,7 +22,7 @@ namespace ParkingSystem.ViewModels
             }
 		}
 
-		private string _password;
+		private string _password = "test123";
 		public string Password
 		{
 			get
@@ -41,9 +42,9 @@ namespace ParkingSystem.ViewModels
 		public ICommand LoginCommand { get; }
 		public ICommand ViewRegisterCommand { get; }
 
-        public LoginViewModel(IRenavigator loginRenavigator)
+        public LoginViewModel(IAuthenticator authenticator, IRenavigator loginRenavigator, IRenavigator registerRenavigator)
         {
-			LoginCommand = new LoginCommand(this, loginRenavigator);
+            LoginCommand = new LoginCommand(this, authenticator, loginRenavigator);
         }
 
         public override void Dispose()

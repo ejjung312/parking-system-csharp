@@ -4,6 +4,7 @@ using ParkingSystem.Services;
 using ParkingSystem.State.Navigators;
 using ParkingSystem.ViewModels;
 using ParkingSystem.ViewModels.Factories;
+using State.Authenticators;
 
 namespace ParkingSystem.HostBuilders
 {
@@ -39,7 +40,7 @@ namespace ParkingSystem.HostBuilders
 
         private static LoginViewModel CreateLoginViewModel(IServiceProvider services)
         {
-            return new LoginViewModel(services.GetRequiredService<ViewModelDelegateRenavigator<ParkingViewModel>>());
+            return new LoginViewModel(services.GetRequiredService<IAuthenticator>(), services.GetRequiredService<ViewModelDelegateRenavigator<ParkingViewModel>>(), services.GetRequiredService<ViewModelDelegateRenavigator<ParkingViewModel>>());
         }
     }
 }
