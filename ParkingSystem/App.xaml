@@ -5,16 +5,22 @@
              xmlns:views="clr-namespace:ParkingSystem.Views"
              xmlns:local="clr-namespace:ParkingSystem">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
-            <views:LoginView />
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Common.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <DataTemplate DataType="{x:Type viewmodels:ParkingViewModel}">
-            <views:Parking />
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+                <views:LoginView />
+            </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewmodels:LoggingViewModel}">
-            <views:Logging />
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:ParkingViewModel}">
+                <views:Parking />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:LoggingViewModel}">
+                <views:Logging />
+            </DataTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

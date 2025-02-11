@@ -7,7 +7,7 @@ namespace ParkingSystem.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-		private string _userid = "test";
+		private string _userid;
 		public string Userid
 		{
 			get
@@ -22,7 +22,7 @@ namespace ParkingSystem.ViewModels
             }
 		}
 
-		private string _password = "test123";
+		private string _password;
 		public string Password
 		{
 			get
