@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ParkingSystem.Views"
+             xmlns:helper="clr-namespace:Helper"
              mc:Ignorable="d" >
     <UserControl.Background>
         <ImageBrush ImageSource="/Resources/login-background.jpg"
@@ -97,11 +98,11 @@
 
                     <TextBlock Grid.Column="0"
                                Text="Password" />
-                    <TextBox Grid.Column="1"
+                    <PasswordBox Grid.Column="1"
                              Margin="20,0,0,0"
                              Height="30"
                              VerticalAlignment="Top"
-                             Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
+                             helper:PasswordHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 
                 <Grid Grid.Row="3"
@@ -114,11 +115,11 @@
 
                     <TextBlock Grid.Column="0"
                                Text="Confirm Password" />
-                    <TextBox Grid.Column="1"
+                    <PasswordBox Grid.Column="1"
                              Margin="20,0,0,0"
                              Height="30"
                              VerticalAlignment="Top"
-                             Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}" />
+                             helper:PasswordHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 
                 <Button Grid.Row="4"
