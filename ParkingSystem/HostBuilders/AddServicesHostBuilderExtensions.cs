@@ -7,7 +7,6 @@ using ParkingSystem.Domain.Services.AuthenticationServices;
 using ParkingSystem.EntityFramework.Services;
 using ParkingSystem.Services;
 using Services;
-using State.Authenticators;
 
 namespace ParkingSystem.HostBuilders
 {

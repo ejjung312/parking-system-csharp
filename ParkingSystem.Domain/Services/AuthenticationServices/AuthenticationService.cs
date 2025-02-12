@@ -24,25 +24,47 @@ namespace ParkingSystem.Domain.Services.AuthenticationServices
                 throw new UserNotFoundException(userid);
             }
 
-            if (user.PasswordHash != password)
+            PasswordVerificationResult passwordResult = _passwordHasher.VerifyHashedPassword(user.PasswordHash, password);
+
+            if (passwordResult != PasswordVerificationResult.Success)
             {
                 throw new InvalidPasswordException(userid, password);
             }
 
-            // TODO - 회원가입 후 다시 테스트
-            //PasswordVerificationResult passwordResult = _passwordHasher.VerifyHashedPassword(user.PasswordHash, password);
-
-            //if (passwordResult != PasswordVerificationResult.Success)
-            //{
-            //    throw new InvalidPasswordException(userid, password);
-            //}
-
             return user;
         }
 
-        public Task<RegistrationResult> Register(string userid, string username, string password, string confirmPassowrd)
+        public async Task<RegistrationResult> Register(string userid, string username, string password, string confirmPassowrd)
         {
-            throw new NotImplementedException();
+            RegistrationResult result = RegistrationResult.Success;
+
+            if (password != confirmPassowrd)
+            {
+                result = RegistrationResult.PasswordDoNotMatch;
+            }
+
+            User user = await _userService.GetUserId(userid);
+            if (user != null)
+            {
+                result = RegistrationResult.IdAlreadyExists;
+            }
+
+            if (result == RegistrationResult.Success)
+            {
+                string hashedPassword = _passwordHasher.HashPassword(password);
+
+                User newUser = new User()
+                {
+                    UserId = userid,
+                    Username = username,
+                    PasswordHash = hashedPassword,
+                    DatedJoined = DateTime.Now
+                };
+
+                await _userService.Create(newUser);
+            }
+
+            return result;
         }
     }
 }

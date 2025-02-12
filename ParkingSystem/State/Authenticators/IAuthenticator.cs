@@ -1,7 +1,7 @@
 ﻿using ParkingSystem.Domain.Models;
 using ParkingSystem.Domain.Services.AuthenticationServices;
 
-namespace State.Authenticators
+namespace ParkingSystem.State.Authenticators
 {
     public interface IAuthenticator
     {

@@ -1,6 +1,7 @@
-﻿using ParkingSystem.Commands;
+﻿using Commands;
+using ParkingSystem.Commands;
+using ParkingSystem.State.Authenticators;
 using ParkingSystem.State.Navigators;
-using State.Authenticators;
 using System.Windows.Input;
 
 namespace ParkingSystem.ViewModels
@@ -45,6 +46,7 @@ namespace ParkingSystem.ViewModels
         public LoginViewModel(IAuthenticator authenticator, IRenavigator loginRenavigator, IRenavigator registerRenavigator)
         {
             LoginCommand = new LoginCommand(this, authenticator, loginRenavigator);
+			ViewRegisterCommand = new RenavigateCommand(registerRenavigator);
         }
 
         public override void Dispose()

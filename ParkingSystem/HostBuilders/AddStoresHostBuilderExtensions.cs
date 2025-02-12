@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ParkingSystem.State.Authenticators;
 using ParkingSystem.State.Navigators;
 using State.Accounts;
-using State.Authenticators;
 
 namespace ParkingSystem.HostBuilders
 {

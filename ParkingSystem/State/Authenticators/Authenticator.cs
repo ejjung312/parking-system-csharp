@@ -2,7 +2,7 @@
 using ParkingSystem.Domain.Services.AuthenticationServices;
 using State.Accounts;
 
-namespace State.Authenticators
+namespace ParkingSystem.State.Authenticators
 {
     public class Authenticator : IAuthenticator
     {
