@@ -1,11 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace ParkingSystem.EntityFramework
 {
     public class ParkingSystemDbContextFactory : IDesignTimeDbContextFactory<ParkingSystemDbContext>
     {
-        private readonly string _connectionString;
+        private string _connectionString;
+
+        public ParkingSystemDbContextFactory()
+        {
+            
+        }
 
         public ParkingSystemDbContextFactory(string connectionString)
         {
@@ -14,7 +21,15 @@ namespace ParkingSystem.EntityFramework
 
         public ParkingSystemDbContext CreateDbContext(string[] args = null)
         {
-            //string _connectionString = "Server=127.0.0.1;Database=dbcsharp;User=csharp;Password=csharp!@;";
+            if (string.IsNullOrEmpty(_connectionString))
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", "ParkingSystem"))
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+                _connectionString = configuration.GetConnectionString("default");
+            }
 
             var options = new DbContextOptionsBuilder<ParkingSystemDbContext>();
 

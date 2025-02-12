@@ -6,6 +6,7 @@ namespace ParkingSystem.EntityFramework
     public class ParkingSystemDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<Vehicle> Vehicles { get; set; }
 
         public ParkingSystemDbContext(DbContextOptions options) : base(options)
         {
