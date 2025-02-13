@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ParkingSystem.Domain.Services.LicensePlateServices;
 using ParkingSystem.Services;
 using ParkingSystem.State.Authenticators;
 using ParkingSystem.State.Navigators;
@@ -37,7 +38,10 @@ namespace ParkingSystem.HostBuilders
 
         private static ParkingViewModel CreateParkingViewModel(IServiceProvider services)
         {
-            return new ParkingViewModel(services.GetRequiredService<ILicensePlateService>(), services.GetRequiredService<IParkingMonitoringService>());
+            return new ParkingViewModel(
+                services.GetRequiredService<ILicensePlateService>(), 
+                services.GetRequiredService<IVehicleService>(), 
+                services.GetRequiredService<IParkingMonitoringService>());
         }
 
         private static LoginViewModel CreateLoginViewModel(IServiceProvider services)

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using ParkingSystem.API.Services;
 using ParkingSystem.Domain.Services;
 using ParkingSystem.Domain.Services.AuthenticationServices;
+using ParkingSystem.Domain.Services.LicensePlateServices;
 using ParkingSystem.EntityFramework.Services;
 using ParkingSystem.Services;
 using Services;
@@ -18,6 +19,8 @@ namespace ParkingSystem.HostBuilders
             {
                 services.AddSingleton<IAuthenticationService, AuthenticationService>();
                 services.AddSingleton<IUserService, UserDataService>();
+                services.AddSingleton<IVehicleDataService, VehicleDataService>();
+                services.AddSingleton<IVehicleService, VehicleService>();
                 services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
                 services.AddSingleton<ILicensePlateService, LicensePlateService>();

@@ -1,4 +1,5 @@
 ﻿using ParkingSystem.API.Results;
+using ParkingSystem.Domain.Services.LicensePlateServices;
 using ParkingSystem.Services;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -10,7 +11,9 @@ namespace ParkingSystem.ViewModels
     public class ParkingViewModel : ViewModelBase
     {
         private readonly ILicensePlateService _licensePlateService;
+        private readonly IVehicleService _vehicleService;
         private readonly IParkingMonitoringService _parkingMonitoringService;
+        
         private ImageSource _enterImage;
         private ImageSource _parkingImage;
         private ObservableCollection<LicensePlateItem> _imageList;
@@ -56,9 +59,10 @@ namespace ParkingSystem.ViewModels
             }
         }
 
-        public ParkingViewModel(ILicensePlateService licensePlateService, IParkingMonitoringService parkingMonitoringService)
+        public ParkingViewModel(ILicensePlateService licensePlateService, IVehicleService vehicleService, IParkingMonitoringService parkingMonitoringService)
         {
             _licensePlateService = licensePlateService;
+            _vehicleService = vehicleService;
             _parkingMonitoringService = parkingMonitoringService;
 
             ImageList = new ObservableCollection<LicensePlateItem>();
@@ -73,12 +77,14 @@ namespace ParkingSystem.ViewModels
             Task.Run(() => _parkingMonitoringService.StartProcessingAsync(_parkingVideo, _ctsParking.Token));
         }
 
-        private void LicensePlateService_FrameProcessed(BitmapSource processedImg, BitmapSource licensePlateImg, string licensePlateTxt)
+        private async void LicensePlateService_FrameProcessed(BitmapSource processedImg, BitmapSource licensePlateImg, string licensePlateTxt)
         {
             EnterImage = processedImg;
 
             if (licensePlateImg != null)
             {
+                EnterResult result = await _vehicleService.EnterVehicle(licensePlateTxt);
+
                 // UI 스레드에서 호출
                 Application.Current.Dispatcher.Invoke(() =>
                 {
