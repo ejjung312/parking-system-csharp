@@ -1,5 +1,6 @@
 ﻿using ParkingSystem.API.Results;
 using ParkingSystem.Domain.Services.LicensePlateServices;
+using ParkingSystem.Helper;
 using ParkingSystem.Services;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -83,7 +84,9 @@ namespace ParkingSystem.ViewModels
 
             if (licensePlateImg != null)
             {
-                EnterResult result = await _vehicleService.EnterVehicle(licensePlateTxt);
+                byte[] licensePlateImgByte = ImageProcessHelper.ConvertBitmapSourceToByteArray(licensePlateImg);
+
+                EnterResult result = await _vehicleService.EnterVehicle(licensePlateImgByte, licensePlateTxt);
 
                 // UI 스레드에서 호출
                 Application.Current.Dispatcher.Invoke(() =>

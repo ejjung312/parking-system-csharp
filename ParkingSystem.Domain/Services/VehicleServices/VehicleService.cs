@@ -11,7 +11,7 @@ namespace ParkingSystem.Domain.Services.LicensePlateServices
             _vehicleDataService = vehicleDataService;
         }
 
-        public async Task<EnterResult> EnterVehicle(string licenseNumber)
+        public async Task<EnterResult> EnterVehicle(byte[] licensePlateImg, string licenseNumber)
         {
             EnterResult result = EnterResult.Success;
 
@@ -27,6 +27,7 @@ namespace ParkingSystem.Domain.Services.LicensePlateServices
                 Vehicle newVehicle = new Vehicle()
                 {
                     LicenseNumber = licenseNumber,
+                    LicensePlateImg = licensePlateImg,
                     EnterDate = DateTime.Now,
                 };
 

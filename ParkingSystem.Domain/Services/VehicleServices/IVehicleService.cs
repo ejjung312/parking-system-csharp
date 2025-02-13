@@ -10,6 +10,6 @@ namespace ParkingSystem.Domain.Services.LicensePlateServices
 
     public interface IVehicleService
     {
-        public Task<EnterResult> EnterVehicle(string licenseNumber);
+        public Task<EnterResult> EnterVehicle(byte[] licensePlateImg, string licenseNumber);
     }
 }
