@@ -15,23 +15,37 @@
         <converters:EqualValuetoParameterConverter x:Key="EqualValueToParameterConverter" />
     </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition
-                Width="auto" />
-            <ColumnDefinition
-                Width="auto" />
-        </Grid.ColumnDefinitions>
-        <RadioButton
-            Grid.Column="0"
-            Command="{Binding UpdateCurrentViewModelCommand}"
-            CommandParameter="{x:Static nav:ViewType.Parking}"
-            Content="Parking"
-            IsChecked="{Binding CurrentViewModel, Mode=OneWay, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Type vm:ParkingViewModel}}" />
-        <RadioButton
-            Grid.Column="1"
-            Command="{Binding UpdateCurrentViewModelCommand}"
-            CommandParameter="{x:Static nav:ViewType.Logging}"
-            Content="Logging"
-            IsChecked="{Binding CurrentViewModel, Mode=OneWay, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Type vm:LoggingViewModel}}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1"
+              Background="{StaticResource BrushPrimary2}"
+              RenderOptions.EdgeMode="Aliased">
+            <Grid MaxWidth="1000">
+                <Grid.Resources>
+                    <Style BasedOn="{StaticResource NavButton}"
+                           TargetType="RadioButton" />
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <RadioButton Grid.Column="0"
+                             Command="{Binding UpdateCurrentViewModelCommand}"
+                             CommandParameter="{x:Static nav:ViewType.Parking}"
+                             Content="Parking"
+                             IsChecked="{Binding CurrentViewModel, Mode=OneWay, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Type vm:ParkingViewModel}}" />
+                <RadioButton Grid.Column="1"
+                             Command="{Binding UpdateCurrentViewModelCommand}"
+                             CommandParameter="{x:Static nav:ViewType.Logging}"
+                             Content="Logging"
+                             IsChecked="{Binding CurrentViewModel, Mode=OneWay, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Type vm:LoggingViewModel}}" />
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>
