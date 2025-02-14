@@ -1,13 +1,104 @@
 ﻿<UserControl x:Class="ParkingSystem.Views.Logging"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ParkingSystem.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
     <Grid>
-        <TextBlock
-            Text="Logging" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        
+        <ListView ItemsSource="{Binding LogList}"
+                  Grid.Row="0"
+                  ScrollViewer.CanContentScroll="False"
+                  VirtualizingStackPanel.IsVirtualizing="True"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  Margin="10">
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="GridViewColumnHeader">
+                                        <Border Padding="0,5,5,5"
+                                                BorderBrush="Gray"
+                                                BorderThickness="0,0,0,1">
+                                            <TextBlock Text="{TemplateBinding Content}" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+
+                    <GridViewColumn DisplayMemberBinding="{Binding Id}"
+                                    Header="번호" />
+                    <GridViewColumn DisplayMemberBinding="{Binding LicenseNumber}"
+                                    Header="번호판" />
+                    <GridViewColumn Header="번호판 사진">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding LicensePlateImg}"
+                                       Width="100"
+                                       Height="50" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding EnterDate}"
+                                    Header="출입일" />
+                </GridView>
+            </ListView.View>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Grid Margin="0,10">
+                                    <GridViewRowPresenter Content="{TemplateBinding Content}"
+                                                          TextBlock.Foreground="Black" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+
+        <!-- 버튼 컨테이너 -->
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="10">
+            <Button Command="{Binding LoggingCommand}"
+                    CommandParameter="p"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Width="100"
+                    Margin="5">
+                <TextBlock Text="이전"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center" />
+            </Button>
+            <Button Command="{Binding LoggingCommand}"
+                    CommandParameter="n"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Width="100"
+                    Margin="5">
+                <TextBlock Text="다음"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center" />
+            </Button>
+        </StackPanel>
     </Grid>
 </UserControl>

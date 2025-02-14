@@ -15,10 +15,13 @@ namespace ParkingSystem.HostBuilders
         {
             host.ConfigureServices(services =>
             {
-                services.AddTransient(CreateParkingViewModel);
-                services.AddTransient<LoggingViewModel>();
+                // 요청마다 매번 새 인스턴스 생성
                 services.AddTransient<MainViewModel>();
+                services.AddTransient(CreateParkingViewModel);
+                services.AddTransient(CreateLoggingViewModel);
+                
 
+                // 애플리케이션 시작 시 한 번만 인스턴스 생성. 전역상태 유지
                 services.AddSingleton<CreateViewModel<ParkingViewModel>>(services => () => services.GetRequiredService<ParkingViewModel>());
                 services.AddSingleton<ViewModelDelegateRenavigator<LoginViewModel>>();
                 services.AddSingleton<ViewModelDelegateRenavigator<RegisterViewModel>>();
@@ -42,6 +45,11 @@ namespace ParkingSystem.HostBuilders
                 services.GetRequiredService<ILicensePlateService>(), 
                 services.GetRequiredService<IVehicleService>(), 
                 services.GetRequiredService<IParkingMonitoringService>());
+        }
+
+        private static LoggingViewModel CreateLoggingViewModel(IServiceProvider services)
+        {
+            return new LoggingViewModel(services.GetRequiredService<IVehicleService>());
         }
 
         private static LoginViewModel CreateLoginViewModel(IServiceProvider services)

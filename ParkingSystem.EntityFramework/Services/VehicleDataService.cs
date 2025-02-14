@@ -10,6 +10,8 @@ namespace ParkingSystem.EntityFramework.Services
         private readonly ParkingSystemDbContextFactory _contextFactory;
         private readonly NonQueryDataService<Vehicle> _nonQueryDataService;
 
+        private int _currentPage = 0;
+        private const int PageSize = 8;
 
         public VehicleDataService(ParkingSystemDbContextFactory contextFactory)
         {
@@ -54,6 +56,33 @@ namespace ParkingSystem.EntityFramework.Services
                 Vehicle entity = await context.Set<Vehicle>().FirstOrDefaultAsync((e) => e.LicenseNumber == licenseNumber);
 
                 return entity;
+            }
+        }
+
+        public async Task<IEnumerable<Vehicle>> GetLoadMoreVehicle(string step)
+        {
+            using (ParkingSystemDbContext context = _contextFactory.CreateDbContext())
+            {
+                if (step.Equals("p"))
+                {
+                    if (_currentPage <= 0) _currentPage = 0;
+                    else  _currentPage -= 1;
+                }
+
+                IEnumerable<Vehicle> entities = await context.Set<Vehicle>()
+                                                    .OrderBy(e => e.Id) // 정렬
+                                                    .Skip(_currentPage * PageSize).Take(PageSize) // 현재 페이지에 해당하는 50개 항목만
+                                                    .ToListAsync();
+                if (step.Equals("n"))
+                {
+                    if (entities.Count() < PageSize)
+                    {
+                        
+                    }
+                    else _currentPage++;
+                }
+
+                return entities;
             }
         }
 

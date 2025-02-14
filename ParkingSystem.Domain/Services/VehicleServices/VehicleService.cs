@@ -36,5 +36,10 @@ namespace ParkingSystem.Domain.Services.LicensePlateServices
 
             return result;
         }
+
+        public async Task<IEnumerable<Vehicle>> GetVehicleHistory(string step)
+        {
+            return await _vehicleDataService.GetLoadMoreVehicle(step);
+        }
     }
 }
